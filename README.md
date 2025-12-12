@@ -21,7 +21,9 @@ Diferente de abordagens padrão, este projeto conta com uma **Interface Gráfica
 ##  Como funciona
 
 *   **Visualização:** O tempo do melhor de todos e o tempo médio da geração são atualizados a cada geração.
-*   **Mecanismo de Cataclismo:** Para explorar mais possibilidades, o sistema detecta estagnação (20 gerações sem melhoria, definida por valores menores que 0.01s) e reseta a população, mantendo apenas o melhor indivíduo.
+*   **Mecanismo de Cataclismo:** Para explorar mais possibilidades, o sistema detecta estagnação e reseta a população, mantendo apenas o melhor indivíduo.
+*   **Elitismo:** O melhor da última geração realiza crossover com cada indivíduo da última geração para produzir o próximo.
+*   **Mutação:** Cada indivíduo geradado irá alterar trocar a ordem de checkpoints.
 
 ---
 
@@ -33,3 +35,8 @@ O projeto foi desenvolvido em **C** utilizando a biblioteca **FreeGLUT** para re
 Instale as bibliotecas gráficas e o compilador:
 ```bash
 sudo apt-get install build-essential freeglut3-dev
+
+Compilar:
+gcc sistevo.c -o sistevo -lGL -lGLU -lglut -lm
+rodar:
+./sistevo
