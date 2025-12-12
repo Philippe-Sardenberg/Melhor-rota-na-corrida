@@ -2,7 +2,7 @@
 
 > **Projeto de Sistemas Evolutivos**  
 > Aplicação de Algoritmos Genéticos para otimização de trajeto em corrida com visualização em tempo real via OpenGL, feito para a disciplina disciplina SSC0713 - Sistemas Evolutivos Aplicados à Robótica
-> ## Sobre o Projeto
+> # Sobre o Projeto
 
 Este software resolve uma variação do **Problema do Caixeiro Viajante (TSP)** aplicada a um contexto de corrida. O objetivo é encontrar a sequência ótima para percorrer 10 checkpoints num terreno sem caminho definido, minimizando o tempo total.
 
