@@ -32,11 +32,14 @@ Diferente de abordagens padrão, este projeto conta com uma **Interface Gráfica
 O projeto foi desenvolvido em **C** utilizando a biblioteca **FreeGLUT** para renderização gráfica.
 
 ####  Linux (Ubuntu/Debian/WSL)
-Instale as bibliotecas gráficas e o compilador:
+instalar FreeGLUT:
 ```bash
 sudo apt-get install build-essential freeglut3-dev
+```bash
 
 Compilar:
 gcc sistevo.c -o sistevo -lGL -lGLU -lglut -lm
+```bash
+
 rodar:
 ./sistevo
