@@ -35,11 +35,11 @@ O projeto foi desenvolvido em **C** utilizando a biblioteca **FreeGLUT** para re
 instalar FreeGLUT:
 ```bash
 sudo apt-get install build-essential freeglut3-dev
+```
 ```bash
-
 Compilar:
 gcc sistevo.c -o sistevo -lGL -lGLU -lglut -lm
+```
 ```bash
-
 rodar:
 ./sistevo
