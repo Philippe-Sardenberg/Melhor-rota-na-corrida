@@ -2,10 +2,11 @@
 
 > **Projeto de Sistemas Evolutivos**  
 > Aplicação de Algoritmos Genéticos para otimização de trajeto em corrida com visualização em tempo real via OpenGL, feito para a disciplina disciplina SSC0713 - Sistemas Evolutivos Aplicados à Robótica
-> # Sobre o Projeto
 
 Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema evolutivo afetam o desempenho do melhor resultado depois de 5000 gerações de 200 indivíduos. O objetivo é encontrar a sequência ótima para percorrer 100 checkpoints sem um caminho pré-determinado em um problema do tipo **Caixeiro Viajante**.
+
 **Exemplo**
+
 <img width="740" height="560" alt="image" src="https://github.com/user-attachments/assets/d35e7c50-1694-41a9-b173-73effb00ddc9" />
 
 **O que a interface gráfica indica**:
