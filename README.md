@@ -25,12 +25,16 @@ Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema
 
 ---
 
-##  Como funciona
+##  O que você pode mexer
 
-*   **Visualização:** O tempo do melhor de todos e o tempo médio da geração são atualizados a cada geração.
+*   **Pausa:** Você pode pausar o processo a qualquer momento apertando **Espaço** ou **P**
+*   **Visualização:** 
 *   **Mecanismo de Cataclismo:** Para explorar mais possibilidades, o sistema detecta estagnação e reseta a população, mantendo apenas o melhor indivíduo.
 *   **Elitismo:** O melhor da última geração realiza crossover com cada indivíduo da última geração para produzir o próximo.
 *   **Mutação:** Cada indivíduo geradado irá alterar trocar a ordem de checkpoints.
+
+---
+## Como o processo evoulutivo ocorre
 
 ---
 
