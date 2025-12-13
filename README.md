@@ -7,7 +7,8 @@ Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema
 
 **Exemplo**
 
-<img width="700" height="839" alt="image" src="https://github.com/user-attachments/assets/fadef65e-5ec1-4e99-b853-10f6ff97c8cd" />
+<img width="700" height="839" alt="image" src="https://github.com/user-attachments/assets/a0b4009e-51d6-4bc1-b5b4-3e71f7987946" />
+
 
 
 **O que a interface gráfica indica**:
