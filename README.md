@@ -36,10 +36,10 @@ instalar FreeGLUT:
 ```bash
 sudo apt-get install build-essential freeglut3-dev
 ```
-```bash
 Compilar:
+```bash
 gcc sistevo.c -o sistevo -lGL -lGLU -lglut -lm
 ```
-```bash
 rodar:
+```bash
 ./sistevo
