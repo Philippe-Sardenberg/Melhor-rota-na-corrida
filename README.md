@@ -32,10 +32,49 @@ Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema
 *   **Visualização:** É possível controlar quantas gerações são simuladas antes de cada atualização e quantos frames se espera antes de atualizar.
 *   **Mecanismo de Cataclismo:** É possível experimentar com valores diferentes para quantas gerações estagnadas se espera antes de fazer o reset
 *   **Propriedades do problema:** O número de checkpoints, total de indivíduos, máximo de gerações e seed usada podem ser trocados para experimentar mais combinações
-*   **Mutação:** 
+*   **Mutação:** A probabilidade de ocorrer a mutação (troca de um checkpoint com outro)
+*   **Crossover:** Se ocorre ou não crossover e como ele ocorre (melhor de todos com qualquer um ou N% dos melhores com qualquer um)
+*   **Taxa na elite:** Controla qual % dos melhores indivíduos vão direto para a próxima geração (útil para preservar diversidade) 
 ---
 ## Como o processo evoulutivo ocorre
 
+1. Representação e Inicialização
+
+    Genoma: Cada indivíduo possui um array de inteiros representando a ordem de visitação dos checkpoints (uma permutação de 0 a 99).
+
+    População: O sistema inicia com 100 indivíduos gerados aleatoriamente (respeitando a seed fixa para reprodutibilidade).
+
+    Custo: É calculada uma matriz de distâncias Euclidianas entre todos os pontos no início da execução para otimizar o cálculo do fitness.
+   
+3. Seleção e Reprodução
+
+A cada geração, uma nova população é criada seguindo estas regras:
+
+    Elitismo: Uma porcentagem definida (TAXA_ELITE) dos melhores indivíduos é copiada integralmente para a próxima geração.
+
+    Seleção de Pais:
+
+        Pai 1: Selecionado do topo da elite (pode ser o Melhor Absoluto ou um sorteado entre os Top N%, configurável via código).
+
+        Pai 2: Escolhido aleatoriamente de toda a população.
+
+3. Operadores Genéticos
+
+    Crossover (Cruzamento): Ocorre se ativado.
+
+        Copia a primeira metade dos genes do Pai 1 para o filho.
+
+        Preenche o restante do genoma do filho com os genes do Pai 2, na ordem em que aparecem, ignorando os que já foram copiados do Pai 1.
+
+    Mutação (Swap): Ocorre com base na probabilidade (PROB_MUTACAO). Se ocorrer, o algoritmo escolhe dois genes aleatórios no caminho e troca suas posições.
+
+5. Mecanismo de Cataclismo (Reset Populacional)
+
+    O sistema monitora a estagnação. Se o melhor fitness não melhorar após LIMITE_ESTAGNACAO gerações, um Reset é acionado.
+
+    O que acontece: O melhor indivíduo é mantido, mas todos os outros 99 indivíduos são mortos e substituídos por novos indivíduos totalmente aleatórios.
+
+    Isso é visível no gráfico como uma linha vertical amarela, geralmente seguida de salto na média da população (linha vermelha), forçando o algoritmo a explorar novas áreas do espaço de busca.
 ---
 
 ## Instalação e Dependências
