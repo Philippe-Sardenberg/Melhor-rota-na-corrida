@@ -3,7 +3,7 @@
 > **Projeto de Sistemas Evolutivos**  
 > Aplicação de Algoritmos Genéticos para otimização de trajeto em corrida com visualização em tempo real via OpenGL, feito para a disciplina disciplina SSC0713 - Sistemas Evolutivos Aplicados à Robótica
 
-Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema evolutivo afetam o desempenho do melhor resultado depois de 5000 gerações de 200 indivíduos. O objetivo é encontrar a sequência ótima para percorrer 100 checkpoints sem um caminho pré-determinado em um problema do tipo **Caixeiro Viajante**.
+Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema evolutivo afetam o desempenho do melhor resultado depois de 5000 gerações de 100 indivíduos. O objetivo é encontrar a sequência ótima para percorrer 100 checkpoints sem um caminho pré-determinado em um problema do tipo **Caixeiro Viajante**.
 
 **Exemplo**
 
@@ -28,11 +28,10 @@ Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema
 ##  O que você pode mexer
 
 *   **Pausa:** Você pode pausar o processo a qualquer momento apertando **Espaço** ou **P**
-*   **Visualização:** 
-*   **Mecanismo de Cataclismo:** Para explorar mais possibilidades, o sistema detecta estagnação e reseta a população, mantendo apenas o melhor indivíduo.
-*   **Elitismo:** O melhor da última geração realiza crossover com cada indivíduo da última geração para produzir o próximo.
-*   **Mutação:** Cada indivíduo geradado irá alterar trocar a ordem de checkpoints.
-
+*   **Visualização:** É possível controlar quantas gerações são simuladas antes de cada atualização e quantos frames se espera antes de atualizar.
+*   **Mecanismo de Cataclismo:** É possível experimentar com valores diferentes para quantas gerações estagnadas se espera antes de fazer o reset
+*   **Propriedades do problema:** O número de checkpoints, total de indivíduos, máximo de gerações e seed usada podem ser trocados para experimentar mais combinações
+*   **Mutação:** 
 ---
 ## Como o processo evoulutivo ocorre
 
