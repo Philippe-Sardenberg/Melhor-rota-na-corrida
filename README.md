@@ -7,7 +7,8 @@ Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema
 
 **Exemplo**
 
-<img width="740" height="560" alt="image" src="https://github.com/user-attachments/assets/d35e7c50-1694-41a9-b173-73effb00ddc9" />
+<img width="700" height="839" alt="image" src="https://github.com/user-attachments/assets/fadef65e-5ec1-4e99-b853-10f6ff97c8cd" />
+
 
 **O que a interface gráfica indica**:
 1.  O mapa com melhor rota encontrada.
