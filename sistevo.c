@@ -1,4 +1,3 @@
-
 #include <GL/glut.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,12 +5,23 @@
 #include <string.h>
 #include <math.h>
 
-// --- CONFIGURAÇÕES ---
+// --- CONFIGURAÇÕES DE EVOLUÇÃO ---
 #define NUM_CHECKPOINTS 100   
-#define TAM_POPULACAO 200     
-#define MAX_GERACOES 5000     
+#define TAM_POPULACAO 100     
+#define MAX_GERACOES 5000    
 #define SEED_FIXA 151
-#define LIMITE_ESTAGNACAO 150 
+
+// --- CONFIGURAÇÕES DE COMPORTAMENTO GENÉTICO ---
+#define LIMITE_ESTAGNACAO 150   // Quantas gerações estagnadas se espera antes do reset populacional
+#define USAR_CROSSOVER 1       // 1 = Sim, 0 = Apenas clona (respeitando seleção) e muta
+#define TAXA_ELITE 0.05        // % que passa direto para a próxima geração
+#define PROB_MUTACAO 25        // Chance de mutação
+#define MODO_SELECAO_PAIS 1   // 0 = usa  o melhor de todos como pai1, 1 = usa um aleatório entre os N% melhores como pai1
+#define TOP_N_PERCENT 50       // Se MODO for 1, define o tamanho do grupo de elite para cruza
+
+// --- CONFIGURAÇÕES DE VISUALIZAÇÃO ---
+#define GERACOES_ENTRE_ATUALIZACOES 5 // Quantas gerações calcula antes atualizar
+#define FRAMES_ENTRE_ATUALIZACOES 16 // Quantos frames espera antes atualizar
 
 // --- VARIÁVEIS GLOBAIS ---
 float tempos[NUM_CHECKPOINTS][NUM_CHECKPOINTS];
@@ -99,9 +109,9 @@ void inicializarPopulacao() {
     }
 }
 
-// --- LÓGICA GENÉTICA E RESET ---
+// --- RESET POPULACIONAL ---
 void aplicarResetPopulacional() {
-    // Mantém o elite (índice 0) e reseta o resto
+    // Mantém o melhor de todos (índice 0) e reseta o resto
     for (int i = 1; i < TAM_POPULACAO; i++) {
         criarIndividuoAleatorio(&populacao[i]);
     }
@@ -145,8 +155,10 @@ void evoluirGeracao() {
         return;
     }
 
+    // 1. Ordena (Melhores no início do array)
     qsort(populacao, TAM_POPULACAO, sizeof(Individuo), compararIndividuos);
 
+    // 2. Verifica Estagnação
     if (populacao[0].fitness < melhorFitnessGlobal - 0.1) {
         melhorFitnessGlobal = populacao[0].fitness;
         contadorEstagnacao = 0;
@@ -154,30 +166,58 @@ void evoluirGeracao() {
         contadorEstagnacao++;
     }
 
+    // 3. Atualiza Histórico
     historicoMelhor[geracaoAtual] = populacao[0].fitness;
-    
     float soma = 0;
     for(int i=0; i<TAM_POPULACAO; i++) soma += populacao[i].fitness;
     historicoMedia[geracaoAtual] = soma / TAM_POPULACAO;
-    
     historicoReset[geracaoAtual] = false;
 
-    // --- CHECK DO RESET ---
+    // 4. Checa se precisa Resetar
     if (contadorEstagnacao >= LIMITE_ESTAGNACAO && geracaoAtual < MAX_GERACOES - 200) {
         aplicarResetPopulacional();
         contadorEstagnacao = 0;
         qsort(populacao, TAM_POPULACAO, sizeof(Individuo), compararIndividuos);
     }
 
-    int eliteCount = TAM_POPULACAO * 0.05;
+    // 5. Elitismo (Preserva os melhores intactos)
+    int eliteCount = (int)(TAM_POPULACAO * TAXA_ELITE);
+    if (TAXA_ELITE > 0 && eliteCount == 0) eliteCount = 1; // Garante ao menos 1
     for(int i=0; i<eliteCount; i++) novaPopulacao[i] = populacao[i];
 
+    // 6. Cruzamento e Mutação (Para o resto da população)
+    
+    // Calcula quantos compõem o grupo "Top N%" para seleção de pais
+    int limitePais = (int)(TAM_POPULACAO * (TOP_N_PERCENT / 100.0));
+    if (limitePais < 1) limitePais = 1; 
+
     for (int i = eliteCount; i < TAM_POPULACAO; i++) {
-        int idx1 = rand() % (TAM_POPULACAO / 2);
+        int idx1;
+        
+        // --- LÓGICA DE SELEÇÃO DO PAI 1 ---
+        if (MODO_SELECAO_PAIS == 0) {
+            // Modo: Melhor cruza com todos
+            idx1 = 0; 
+        } else {
+            // Modo: Top N% cruza com todos
+            // Escolhe aleatoriamente alguém dentro dos melhores N%
+            idx1 = rand() % limitePais;
+        }
+
+        // Pai 2 continua sendo aleatório da população inteira para manter diversidade
         int idx2 = rand() % TAM_POPULACAO;
+
         Individuo filho;
-        crossover(populacao[idx1], populacao[idx2], &filho);
-        if((rand() % 100) < 15) mutacao(&filho);
+
+        if (USAR_CROSSOVER) {
+            crossover(populacao[idx1], populacao[idx2], &filho);
+        } else {
+            // Se sem crossover, clona o Pai 2 (para variar mais, já que Pai 1 é muito elitista)
+            filho = populacao[idx2];
+        }
+
+        if((rand() % 100) < PROB_MUTACAO) mutacao(&filho);
+        
         calcularFitness(&filho);
         novaPopulacao[i] = filho;
     }
@@ -227,7 +267,7 @@ void display() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // --- MAPA (Visualização da Rota) ---
-    glViewport(0, 300, 800, 300);
+    glViewport(150, 300, 600, 600);
     glMatrixMode(GL_PROJECTION); glLoadIdentity(); gluOrtho2D(0, 1, 0, 1);
 
     glLineWidth(1.5);
@@ -277,9 +317,8 @@ void display() {
         if(historicoReset[i]) { glVertex2f(i, 0); glVertex2f(i, yMaxGraph); }
     }
     glEnd();
-
+    // Linhas das distâncias encontradas
     if(geracaoAtual > 0) {
-        // Linha da Média (Vermelho Claro)
         glColor3f(0.8, 0.3, 0.3); 
         glBegin(GL_LINE_STRIP);
         for(int i=0; i<geracaoAtual; i++) {
@@ -289,7 +328,6 @@ void display() {
         }
         glEnd();
         
-        // Linha do Melhor (Verde)
         glColor3f(0.0, 1.0, 0.0);
         glLineWidth(1.5);
         glBegin(GL_LINE_STRIP);
@@ -300,7 +338,7 @@ void display() {
     glColor3f(0.7, 0.7, 0.7);
     for(int i=0; i<=MAX_GERACOES; i+=1000) drawNum(i+50, yMaxGraph*0.02, (float)i);
     
-    // --- DADOS (Painel Lateral Direito) ---
+    // --- DADOS (Painel Canto Direito) ---
     glViewport(500, 0, 300, 300);
     glLoadIdentity(); gluOrtho2D(0, 1, 0, 1);
 
@@ -318,7 +356,7 @@ void display() {
     sprintf(buf, "Melhor: %.2f", populacao[0].fitness);
     drawString(0.05, 0.74, GLUT_BITMAP_HELVETICA_18, buf);
     
-    // Calcula a média para exibição (pega do histórico ou calcula se for a gen 0)
+    // Média
     float mediaExibir = 0.0;
     if (geracaoAtual > 0) mediaExibir = historicoMedia[geracaoAtual - 1];
     else {
@@ -327,20 +365,24 @@ void display() {
         mediaExibir = soma / TAM_POPULACAO;
     }
     
-    glColor3f(0.8, 0.3, 0.3); // Mesma cor da linha do gráfico
+    glColor3f(0.8, 0.3, 0.3); 
     sprintf(buf, "Media: %.2f", mediaExibir);
     drawString(0.05, 0.66, GLUT_BITMAP_HELVETICA_18, buf);
-    // ===================
 
-    // Resets
+    // Resets e Estagnação
     glColor3f(1.0, 1.0, 0.0);
     sprintf(buf, "Resets: %d", totalResets);
     drawString(0.05, 0.58, GLUT_BITMAP_HELVETICA_18, buf);
 
-    // Estagnação
     glColor3f(0.8, 0.8, 0.8);
     sprintf(buf, "Estagnacao: %d / %d", contadorEstagnacao, LIMITE_ESTAGNACAO);
     drawString(0.05, 0.50, GLUT_BITMAP_HELVETICA_12, buf);
+
+    // Exibe Configuração Atual (melhor de todos ou N% melhores)
+    glColor3f(0.5, 0.5, 0.5);
+    if(MODO_SELECAO_PAIS == 0) sprintf(buf, "Modo: Best x All");
+    else sprintf(buf, "Modo: Top %d%% x All", TOP_N_PERCENT);
+    drawString(0.05, 0.42, GLUT_BITMAP_HELVETICA_10, buf);
 
     if (simulacaoFinalizada) {
         glColor3f(0.0, 1.0, 0.0);
@@ -350,12 +392,13 @@ void display() {
     glutSwapBuffers();
 }
 
+// --- TIMER E VISUALIZAÇÃO ---
 void timer(int value) {
     if (!pausado && !simulacaoFinalizada) {
-        for(int k=0; k<5; k++) evoluirGeracao();
+        for(int k=0; k<GERACOES_ENTRE_ATUALIZACOES; k++) evoluirGeracao();
     }
     glutPostRedisplay();
-    glutTimerFunc(16, timer, 0); 
+    glutTimerFunc(FRAMES_ENTRE_ATUALIZACOES, timer, 0); 
 }
 
 int main(int argc, char** argv) {
