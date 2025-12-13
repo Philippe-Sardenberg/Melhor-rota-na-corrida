@@ -4,13 +4,18 @@
 > Aplicação de Algoritmos Genéticos para otimização de trajeto em corrida com visualização em tempo real via OpenGL, feito para a disciplina disciplina SSC0713 - Sistemas Evolutivos Aplicados à Robótica
 > # Sobre o Projeto
 
-Este software resolve uma variação do **Problema do Caixeiro Viajante (TSP)** aplicada a um contexto de corrida. O objetivo é encontrar a sequência ótima para percorrer 10 checkpoints num terreno sem caminho definido, minimizando o tempo total.
+Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema evolutivo afetam o desempenho do melhor resultado depois de 5000 gerações de 200 indivíduos. O objetivo é encontrar a sequência ótima para percorrer 100 checkpoints sem um caminho pré-determinado em um problema do tipo **Caixeiro Viajante**.
+**Exemplo**
+<img width="740" height="560" alt="image" src="https://github.com/user-attachments/assets/d35e7c50-1694-41a9-b173-73effb00ddc9" />
 
-Diferente de abordagens padrão, este projeto conta com uma **Interface Gráfica em OpenGL** que exibe:
-1.  O mapa e a melhor rota em tempo real.
-2.  Gráficos de evolução (Fitness Médio vs Melhor Fitness).
-3.  Dados estatísticos com precisão decimal.
-4.  Visualização de mecanismos avançados como **Reset Populacional**.
+**O que a interface gráfica indica**:
+1.  O mapa com melhor rota encontrada.
+2.  Gráfico de evolução (tempo médio vs melhor tempo).
+3.  A linha vertical amarela no gráfico de evolução marca a ocorrência de um reset populacional.
+4.  As cores dos segmentos e pontos seguem a seguinte lógica:
+4.1. O ponto branco indica onde a rota começa e termina;
+4.2. Os segmentos indicam em qual ordem o segmento fica em relação a um gradiente (azul -> verde -> laranja/vermelho, sendo azul a cor dos segmentos de início e avermelhado a dos segmentos finais)
+
 
 ##  Demonstração em Vídeo
 
