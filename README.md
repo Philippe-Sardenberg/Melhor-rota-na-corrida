@@ -36,7 +36,7 @@ Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema
 *   **Crossover:** Se ocorre ou não crossover e como ele ocorre (melhor de todos com qualquer um ou N% dos melhores com qualquer um)
 *   **Taxa na elite:** Controla qual % dos melhores indivíduos vão direto para a próxima geração (útil para preservar diversidade) 
 ---
-## Como o processo evoulutivo ocorre
+## Como o processo evolutivo ocorre
 
 1. Representação e Inicialização
 
