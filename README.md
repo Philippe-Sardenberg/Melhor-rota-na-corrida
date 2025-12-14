@@ -22,7 +22,8 @@ Este Projeto foi feito para visualizar como diferentes parâmetros de um sistema
 
 ##  Demonstração em Vídeo
 
-
+https://drive.google.com/file/d/1nQv0KNohOFpBERNqWrQfLPW8AGAOudZJ/view?usp=sharing
+(Obs: Em uma parte eu troco usar_crossover com modo_selecao_pais.)
 
 ---
 
